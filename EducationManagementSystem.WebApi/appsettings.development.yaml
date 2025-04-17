@@ -1,0 +1,28 @@
+JwtSecretKey: "1234567890123456789012345678901234567890bobertrobert"
+JwtIssuer: "http://localhost:5020"
+JwtAudience: "http://localhost:5020"
+
+HangfireConnection: "Data Source=hangfire.db"
+HangfireUsername: "bobert"
+HangfirePassword: "robert"
+
+DatabaseConnection: "Data Source=../Database/app.db"
+
+MonobankApiKey: ""
+MonobankAccountId: ""
+MonobankOldAccountId: ""
+MonobankJarId: ""
+PaymentLinkToken: ""
+WebhookUrl: "http://localhost:5020"
+WebhookFopUrl: "http://localhost:5020"
+
+TelegramBotToken: "5237757637:AAGI-5kPmyyKpgqkdkJlJcOx5EEL3_fGoq0"
+TelegramChatIds:
+  - "430633571"
+TelegramBackupChatId: "7059241825"
+
+Admins: 
+  - Id: "D80646F8-E66D-4818-8B68-24E78DED385D"
+    FullName: "Bobert Robert"
+    Username: "bobert"
+    Password: "robert"
