@@ -33,7 +33,6 @@ public class StudentsServiceTests : ServiceTests
         {
             Id = Admin.Id,
             FullName = "Bob",
-            Languages = ["English"]
         };
         dbContext.Students.Add(_student);
         
@@ -42,12 +41,10 @@ public class StudentsServiceTests : ServiceTests
             Id = Guid.NewGuid(),
             FullName = "Bob",
             Username = "bobbob",
-            Balance = 100,
             PasswordHash = "",
             PasswordSalt = "",
             Role = Role.Admin,
             RegisteredAt = _clock.Now,
-            WorkingHours = ""
         };
         dbContext.Teachers.Add(teacher);
         
@@ -56,9 +53,6 @@ public class StudentsServiceTests : ServiceTests
             Student = _student,
             DateTime = _clock.Now,
             Description = "Math Lesson",
-            Price = 50,
-            OneTime = false,
-            TeacherEarnings = 40,
             Teacher = teacher,
             Duration = 1.Hours()
         };
@@ -67,19 +61,14 @@ public class StudentsServiceTests : ServiceTests
             Student = _student,
             DateTime = _clock.Now.AddHours(1),
             Description = "Math Lesson",
-            Price = 50,
-            OneTime = false,
-            TeacherEarnings = 40,
             Teacher = teacher,
             Duration = 1.Hours(),
-            Paid = true
         };
         dbContext.Lessons.AddRange(lesson1, lesson2);
         
         dbContext.SaveChanges();
         
-        return new StudentsService(dbContext, 
-            Substitute.For<IValidator<NewStudentDto>>(), _clock);
+        return new StudentsService(dbContext, Substitute.For<IValidator<NewStudentDto>>());
     }
 
     [Fact]
@@ -107,8 +96,6 @@ public class StudentsServiceTests : ServiceTests
 
         // Assert
         studentDto.Should().NotBeNull();
-        studentDto.UnpaidLessons.Should().Be(0);
-        studentDto.UnpaidLessonsPrice.Should().Be(0);
     }
 
     [Fact]

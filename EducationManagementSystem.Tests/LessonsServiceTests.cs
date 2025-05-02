@@ -44,12 +44,10 @@ public class LessonsServiceTests : ServiceTests
             Id = Admin.Id,
             FullName = "Bob",
             Username = "bobbob",
-            Balance = 100,
             PasswordHash = "hashed_password",
             PasswordSalt = "password_salt",
             Role = Role.Teacher,
             RegisteredAt = _clock.Today.SetTime(10, 00),
-            WorkingHours = ""
         };
         _dbContext.Teachers.Add(_teacher);
         _dbContext.SaveChanges();
@@ -68,9 +66,6 @@ public class LessonsServiceTests : ServiceTests
             ExistingStudentId = null,
             DateTime = _clock.Today.SetTime(10, 00),
             Description = "Math Lesson",
-            Price = 50,
-            OneTime = false,
-            TeacherEarnings = 40,
             DurationMinutes = 60
         };
 
@@ -86,9 +81,6 @@ public class LessonsServiceTests : ServiceTests
         addedLesson!.Id.Should().Be(addedLessonId);
         addedLesson.Student.FullName.Should().Be(newLessonDto.StudentName);
         addedLesson.Description.Should().Be(newLessonDto.Description);
-        addedLesson.Price.Should().Be(newLessonDto.Price);
-        addedLesson.OneTime.Should().Be(newLessonDto.OneTime);
-        addedLesson.TeacherEarnings.Should().Be(newLessonDto.TeacherEarnings);
         
         var nextWeekLesson = await _dbContext.Lessons
             .FirstOrDefaultAsync(x => x.DateTime == newLessonDto.DateTime.AddDays(7));
@@ -104,7 +96,6 @@ public class LessonsServiceTests : ServiceTests
         var newStudent = new Student
         {
             FullName = "Bobert",
-            Languages = ["English"]
         };
         _dbContext.Students.Add(newStudent);
         await _dbContext.SaveChangesAsync();
@@ -115,9 +106,6 @@ public class LessonsServiceTests : ServiceTests
             ExistingStudentId = newStudent.Id,
             DateTime = _clock.Today.SetTime(10, 00),
             Description = "Test",
-            Price = 50,
-            OneTime = false,
-            TeacherEarnings = 40,
             DurationMinutes = 60
         };
 
@@ -147,13 +135,9 @@ public class LessonsServiceTests : ServiceTests
         {
             Student = new Student { 
                 FullName = "John Doe",
-                Languages = ["English"] 
             },
             DateTime = _clock.Today.SetTime(10, 00),
             Description = "Math Lesson",
-            Price = 50,
-            OneTime = false,
-            TeacherEarnings = 40,
             Teacher = _teacher,
             Duration = 1.Hours()
         };
@@ -176,12 +160,9 @@ public class LessonsServiceTests : ServiceTests
         var lessonsService = GetLessonsService();
         var lesson = new Lesson
         {
-            Student = new Student { FullName = "John Doe", Languages = ["English"] },
+            Student = new Student { FullName = "John Doe" },
             DateTime = _clock.Today.SetTime(10, 00),
             Description = "Math Lesson",
-            Price = 50,
-            OneTime = false,
-            TeacherEarnings = 40,
             Teacher = _teacher,
             Duration = 1.Hours()
         };
@@ -204,12 +185,9 @@ public class LessonsServiceTests : ServiceTests
         var lessonsService = GetLessonsService();
         var lesson = new Lesson
         {
-            Student = new Student { FullName = "John Doe", Languages = ["English"] },
+            Student = new Student { FullName = "John Doe" },
             DateTime = _clock.Today.SetTime(10, 00),
             Description = "Math Lesson",
-            Price = 50,
-            OneTime = false,
-            TeacherEarnings = 40,
             Teacher = _teacher,
             Duration = 1.Hours(),
             Status = Status.Completed
@@ -235,12 +213,9 @@ public class LessonsServiceTests : ServiceTests
     
         var existingLesson = new Lesson
         {
-            Student = new Student { FullName = "John Doe", Languages = ["English"] },
+            Student = new Student { FullName = "John Doe" },
             DateTime = new DateTime(DateOnly.FromDateTime(_clock.Today), TimeOnly.Parse(existingLessonStartTime)),
             Description = "Math Lesson",
-            Price = 50,
-            OneTime = false,
-            TeacherEarnings = 40,
             Teacher = _teacher,
             Duration = 1.Hours()
         };
@@ -251,10 +226,7 @@ public class LessonsServiceTests : ServiceTests
             ExistingStudentId = null,
             Description = "Math Lesson",
             DateTime = new DateTime(DateOnly.FromDateTime(_clock.Today), TimeOnly.Parse(lessonToAddStartTime)),
-            Price = 50,
-            OneTime = false,
             DurationMinutes = 60,
-            TeacherEarnings = 40
         };
     
         _teacher.Lessons.Add(existingLesson);
@@ -279,12 +251,9 @@ public class LessonsServiceTests : ServiceTests
     
         var existingLesson = new Lesson
         {
-            Student = new Student { FullName = "John Doe", Languages = ["English"] },
+            Student = new Student { FullName = "John Doe" },
             DateTime = new DateTime(_clock.Today.ToDateOnly(), TimeOnly.Parse(existingLessonStartTime)),
             Description = "Math Lesson",
-            Price = 50,
-            OneTime = false,
-            TeacherEarnings = 40,
             Teacher = _teacher,
             Duration = existingLessonDurationMinutes.Minutes()
         };
@@ -295,10 +264,7 @@ public class LessonsServiceTests : ServiceTests
             ExistingStudentId = null,
             Description = "Math Lesson",
             DateTime = new DateTime(_clock.Today.ToDateOnly(), TimeOnly.Parse(lessonToAddStartTime)),
-            Price = 50,
-            OneTime = false,
             DurationMinutes = lessonToAddDurationMinutes,
-            TeacherEarnings = 40
         };
     
         _teacher.Lessons.Add(existingLesson);
@@ -321,12 +287,9 @@ public class LessonsServiceTests : ServiceTests
     
         var existingLesson = new Lesson
         {
-            Student = new Student { FullName = "John Doe", Languages = ["English"] },            
+            Student = new Student { FullName = "John Doe" },            
             DateTime = new DateTime(DateOnly.FromDateTime(_clock.Today), TimeOnly.Parse(existingLessonStartTime)),
             Description = "Math Lesson",
-            Price = 50,
-            OneTime = false,
-            TeacherEarnings = 40,
             Teacher = _teacher,
             Duration = 1.Hours()
         };
@@ -337,10 +300,7 @@ public class LessonsServiceTests : ServiceTests
             ExistingStudentId = null,
             DateTime = new DateTime(DateOnly.FromDateTime(_clock.Today), TimeOnly.Parse(lessonToAddStartTime)),
             Description = "Math Lesson",
-            Price = 50,
-            OneTime = false,
             DurationMinutes = 60,
-            TeacherEarnings = 40
         };
     
         _teacher.Lessons.Add(existingLesson);
@@ -364,12 +324,9 @@ public class LessonsServiceTests : ServiceTests
     
         var existingLesson = new Lesson
         {
-            Student = new Student { FullName = "John Doe", Languages = ["English"] },            
+            Student = new Student { FullName = "John Doe" },            
             DateTime = new DateTime(DateOnly.FromDateTime(_clock.Today), TimeOnly.Parse(existingLessonStartTime)),
             Description = "Math Lesson",
-            Price = 50,
-            OneTime = false,
-            TeacherEarnings = 40,
             Teacher = _teacher,
             Duration = existingLessonDurationMinutes.Minutes()
         };
@@ -380,10 +337,7 @@ public class LessonsServiceTests : ServiceTests
             ExistingStudentId = null,
             DateTime = new DateTime(DateOnly.FromDateTime(_clock.Today), TimeOnly.Parse(lessonToAddStartTime)),
             Description = "Math Lesson",
-            Price = 50,
-            OneTime = false,
             DurationMinutes = lessonToAddDurationMinutes,
-            TeacherEarnings = 40
         };
     
         _teacher.Lessons.Add(existingLesson);
@@ -404,12 +358,9 @@ public class LessonsServiceTests : ServiceTests
         var lessonsService = GetLessonsService();
         var lesson = new Lesson
         {
-            Student = new Student { FullName = "John Doe", Languages = ["English"] },
+            Student = new Student { FullName = "John Doe" },
             DateTime = _clock.Today.SetTime(10, 00),
             Description = "Math Lesson",
-            Price = 50,
-            OneTime = false,
-            TeacherEarnings = 40,
             Teacher = _teacher,
             Duration = 1.Hours()
         };
@@ -422,10 +373,7 @@ public class LessonsServiceTests : ServiceTests
             ExistingStudentId = null,
             DateTime = _clock.Today.SetTime(10, 00),
             Description = "History Lesson",
-            Price = 60,
-            OneTime = true,
             DurationMinutes = 60,
-            TeacherEarnings = 50
         };
 
         // Act
@@ -439,9 +387,6 @@ public class LessonsServiceTests : ServiceTests
         editedLesson!.Student.FullName.Should().Be(newLessonDto.StudentName);
         editedLesson.DateTime.Should().Be(newLessonDto.DateTime);
         editedLesson.Description.Should().Be(newLessonDto.Description);
-        editedLesson.Price.Should().Be(newLessonDto.Price);
-        editedLesson.OneTime.Should().Be(newLessonDto.OneTime);
-        editedLesson.TeacherEarnings.Should().Be(newLessonDto.TeacherEarnings);
     }
     
     [Fact]
@@ -451,12 +396,9 @@ public class LessonsServiceTests : ServiceTests
         var lessonsService = GetLessonsService();
         var lesson1 = new Lesson
         {
-            Student = new Student { FullName = "John Doe", Languages = ["English"] },
+            Student = new Student { FullName = "John Doe" },
             DateTime = _clock.Today.SetTime(10, 00),
             Description = "Math Lesson",
-            Price = 50,
-            OneTime = false,
-            TeacherEarnings = 40,
             Teacher = _teacher,
             Duration = 1.Hours()
         };
@@ -465,9 +407,6 @@ public class LessonsServiceTests : ServiceTests
             Student = lesson1.Student,
             DateTime = _clock.Today.AddDays(7).SetTime(10, 00),
             Description = "Math Lesson",
-            Price = 50,
-            OneTime = false,
-            TeacherEarnings = 40,
             Teacher = _teacher,
             Duration = 1.Hours()
         };
@@ -480,10 +419,7 @@ public class LessonsServiceTests : ServiceTests
             ExistingStudentId = null,
             DateTime = _clock.Today.SetTime(10, 00),
             Description = "History Lesson",
-            Price = 60,
-            OneTime = true,
             DurationMinutes = 60,
-            TeacherEarnings = 50
         };
 
         // Act
@@ -503,16 +439,10 @@ public class LessonsServiceTests : ServiceTests
         editedLesson1!.Student.FullName.Should().Be(newLessonDto.StudentName);
         editedLesson1.DateTime.Should().Be(newLessonDto.DateTime);
         editedLesson1.Description.Should().Be(newLessonDto.Description);
-        editedLesson1.Price.Should().Be(newLessonDto.Price);
-        editedLesson1.OneTime.Should().Be(newLessonDto.OneTime);
-        editedLesson1.TeacherEarnings.Should().Be(newLessonDto.TeacherEarnings);
         
         editedLesson2!.Student.FullName.Should().Be(newLessonDto.StudentName);
         editedLesson2.DateTime.Should().Be(newLessonDto.DateTime.AddDays(7));
         editedLesson2.Description.Should().Be(newLessonDto.Description);
-        editedLesson2.Price.Should().Be(newLessonDto.Price);
-        editedLesson2.OneTime.Should().Be(newLessonDto.OneTime);
-        editedLesson2.TeacherEarnings.Should().Be(newLessonDto.TeacherEarnings);
     }
 
     [Fact]
@@ -522,12 +452,9 @@ public class LessonsServiceTests : ServiceTests
         var lessonsService = GetLessonsService();
         var lesson = new Lesson
         {
-            Student = new Student { FullName = "John Doe", Languages = ["English"] },
+            Student = new Student { FullName = "John Doe" },
             DateTime = _clock.Today.SetTime(10, 00),
             Description = "Math Lesson",
-            Price = 50,
-            OneTime = false,
-            TeacherEarnings = 40,
             Teacher = _teacher,
             Duration = 1.Hours()
         };
@@ -549,12 +476,9 @@ public class LessonsServiceTests : ServiceTests
         var lessonsService = GetLessonsService();
         var lesson1 = new Lesson
         {
-            Student = new Student { FullName = "John Doe", Languages = ["English"] },
+            Student = new Student { FullName = "John Doe" },
             DateTime = _clock.Today.SetTime(10, 00),
             Description = "Math Lesson",
-            Price = 50,
-            OneTime = false,
-            TeacherEarnings = 40,
             Teacher = _teacher,
             Duration = 1.Hours()
         };
@@ -563,9 +487,6 @@ public class LessonsServiceTests : ServiceTests
             Student = lesson1.Student,
             DateTime = _clock.Today.AddDays(7).SetTime(10, 00),
             Description = "Math Lesson",
-            Price = 50,
-            OneTime = false,
-            TeacherEarnings = 40,
             Teacher = _teacher,
             Duration = 1.Hours()
         };
@@ -590,72 +511,54 @@ public class LessonsServiceTests : ServiceTests
         var lessonsService = GetLessonsService();
         var lesson1Old = new Lesson
         {
-            Student = new Student { FullName = "John Doe", Languages = ["English"] },
+            Student = new Student { FullName = "John Doe" },
             DateTime = _clock.Today.AddDays(-7).SetTime(10, 00),
             Description = "Math Lesson",
-            Price = 50,
-            OneTime = false,
-            TeacherEarnings = 40,
             Teacher = _teacher,
             Duration = 1.Hours(),
             Status = Status.Completed
         };
         var lesson2Old = new Lesson
         {
-            Student = new Student { FullName = "Jane Doe", Languages = ["English"] },
+            Student = new Student { FullName = "Jane Doe" },
             DateTime = _clock.Today.AddDays(-7).SetTime(10, 00),
             Description = "History Lesson",
-            Price = 60,
-            OneTime = true,
-            TeacherEarnings = 50,
             Teacher = _teacher,
             Duration = 1.Hours(),
             Status = Status.Completed
         };
         var lesson1 = new Lesson
         {
-            Student = new Student { FullName = "John Doe", Languages = ["English"] },
+            Student = new Student { FullName = "John Doe" },
             DateTime = _clock.Today.SetTime(11, 00),
             Description = "Math Lesson",
-            Price = 50,
-            OneTime = false,
-            TeacherEarnings = 40,
             Teacher = _teacher,
             Duration = 1.Hours(),
             Status = Status.Completed
         };
         var lesson2 = new Lesson
         {
-            Student = new Student { FullName = "Jane Doe", Languages = ["English"] },
+            Student = new Student { FullName = "Jane Doe" },
             DateTime = _clock.Today.SetTime(11, 00),
             Description = "History Lesson",
-            Price = 60,
-            OneTime = true,
-            TeacherEarnings = 50,
             Teacher = _teacher,
             Duration = 1.Hours(),
             Status = Status.Completed
         };
         var lesson3 = new Lesson
         {
-            Student = new Student { FullName = "Jane Doe", Languages = ["English"] },
+            Student = new Student { FullName = "Jane Doe" },
             DateTime = _clock.Today.SetTime(12, 00),
             Description = "History Lesson",
-            Price = 60,
-            OneTime = false,
-            TeacherEarnings = 50,
             Teacher = _teacher,
             Duration = 1.Hours(),
             Status = Status.Completed
         };
         var lesson3New = new Lesson
         {
-            Student = new Student { FullName = "Jane Doe", Languages = ["English"] },
+            Student = new Student { FullName = "Jane Doe" },
             DateTime = _clock.Today.AddDays(7).SetTime(12, 00),
             Description = "History Lesson",
-            Price = 60,
-            OneTime = false,
-            TeacherEarnings = 50,
             Teacher = _teacher,
             Duration = 1.Hours(),
             Status = Status.Completed
@@ -668,7 +571,6 @@ public class LessonsServiceTests : ServiceTests
 
         // Assert
         var lesson1AfterReset = await _dbContext.Lessons.FindAsync(lesson1.Id);
-        var lesson2AfterReset = await _dbContext.Lessons.FindAsync(lesson2.Id);
         lesson1AfterReset.Should().NotBeNull();
         
         // Copy of lesson1 (not one-time) next week should be created
@@ -676,13 +578,6 @@ public class LessonsServiceTests : ServiceTests
             .Where(x => x.DateTime == lesson1.DateTime.AddDays(7) && x.Description == lesson1.Description)
             .ToListAsync();
         copyOfLesson1NextWeek.Should().HaveCount(1);
-        
-        // OneTime lessons (like lesson2) should be deleted
-        lesson2AfterReset.Should().NotBeNull();
-        var copyOfLesson2NextWeek = await _dbContext.Lessons
-            .Where(x => x.DateTime == lesson2.DateTime.AddDays(7) && x.Description == lesson2.Description)
-            .ToListAsync();
-        copyOfLesson2NextWeek.Should().HaveCount(0);
         
         var copyOfLesson3NextWeek = await _dbContext.Lessons
             .Where(x => x.DateTime == lesson3.DateTime.AddDays(7) && x.Description == lesson3.Description)

@@ -49,7 +49,6 @@ public class LessonsService : ILessonsService
             student = new Student
             {
                 FullName = newLesson.StudentName!,
-                Languages = []
             };
             await _dbContext.Students.AddAsync(student);
         }
@@ -59,9 +58,6 @@ public class LessonsService : ILessonsService
             Student = student,
             DateTime = newLesson.DateTime,
             Description = newLesson.Description,
-            Price = newLesson.Price,
-            OneTime = newLesson.OneTime,
-            TeacherEarnings = newLesson.TeacherEarnings,
             Teacher = teacher,
             Duration = newLesson.DurationMinutes.Minutes(),
         };
@@ -70,16 +66,13 @@ public class LessonsService : ILessonsService
         teacher.Lessons.Add(lessonToAdd);
         
         // Add lesson for next week
-        if (!lessonToAdd.OneTime && lessonToAdd.DateTime >= _clock.Today.StartOfWeek())
+        if (lessonToAdd.DateTime >= _clock.Today.StartOfWeek())
         {
             var lessonNextWeek = new Lesson
             {
                 Student = student,
                 DateTime = newLesson.DateTime.AddDays(7),
                 Description = newLesson.Description,
-                Price = newLesson.Price,
-                OneTime = newLesson.OneTime,
-                TeacherEarnings = newLesson.TeacherEarnings,
                 Teacher = teacher,
                 Duration = newLesson.DurationMinutes.Minutes(),
             };
@@ -121,20 +114,14 @@ public class LessonsService : ILessonsService
 
         if (lesson.Status == Status.Completed)
         {
-            teacher.Balance -= lesson.TeacherEarnings;
-            
             var school = await _dbContext.Schools.FirstAsync();
-            school.Balance -= lesson.Price - lesson.TeacherEarnings;
         }
 
         lesson.Status = newStatus;
 
         if (newStatus == Status.Completed)
         {
-            teacher.Balance += lesson.TeacherEarnings;
-
             var school1 = await _dbContext.Schools.FirstAsync();
-            school1.Balance += lesson.Price - lesson.TeacherEarnings;
         }
 
         await _dbContext.SaveChangesAsync();
@@ -165,13 +152,12 @@ public class LessonsService : ILessonsService
             student = new Student
             {
                 FullName = newLesson.StudentName!,
-                Languages = []
             };
             await _dbContext.Students.AddAsync(student);
         }
 
         // Check if there is a lesson next week and edit it as well
-        if (!lessonToEdit.OneTime && lessonToEdit.Paid == newLesson.Paid && _dbContext.Lessons.Include(x => x.Student)
+        if (_dbContext.Lessons.Include(x => x.Student)
                 .Any(IsSameLessonNextWeek(lessonToEdit)))
         {
             var lessonNextWeek = await _dbContext.Lessons.FirstAsync(x => x.DateTime == lessonToEdit.DateTime.AddDays(7));
@@ -189,11 +175,7 @@ public class LessonsService : ILessonsService
         
         lessonToEdit.Student = student;
         lessonToEdit.DateTime = newLesson.DateTime;
-        lessonToEdit.OneTime = newLesson.OneTime;
-        lessonToEdit.TeacherEarnings = newLesson.TeacherEarnings;
-        lessonToEdit.Price = newLesson.Price;
         lessonToEdit.Description = newLesson.Description;
-        lessonToEdit.Paid = newLesson.Paid;
         lessonToEdit.Duration = newLesson.DurationMinutes.Minutes();
 
         CheckLessonTimeTaken(lessonToEdit, teacher);
@@ -215,7 +197,7 @@ public class LessonsService : ILessonsService
         lessonToDelete.ThrowIfNull(_ => new NotFoundException("Lesson not found"));
         
          // Check if there is a lesson next week and delete it as well
-        if (!lessonToDelete.OneTime && teacher.Lessons.Any(IsSameLessonNextWeek(lessonToDelete)))
+        if (teacher.Lessons.Any(IsSameLessonNextWeek(lessonToDelete)))
         {
             var lessonNextWeek = teacher.Lessons
                 .First(x => x.DateTime == lessonToDelete.DateTime.AddDays(7));
@@ -243,7 +225,7 @@ public class LessonsService : ILessonsService
         var lessonsToCopy = await _dbContext.Lessons
             .Include(x => x.Student)
             .Include(x => x.Teacher)
-            .Where(x => !x.OneTime && x.DateTime >= startOfCurrentWeek)
+            .Where(x => x.DateTime >= startOfCurrentWeek)
             .ToListAsync();
 
         var newLessons = lessonsToCopy.Select(lesson => new
@@ -251,10 +233,7 @@ public class LessonsService : ILessonsService
             ExistingStudentId = lesson.Student.Id,
             DateTime = lesson.DateTime.AddDays(7),
             Description = lesson.Description,
-            Price = lesson.Price,
-            OneTime = lesson.OneTime,
             Teacher = lesson.Teacher,
-            TeacherEarnings = lesson.TeacherEarnings,
             DurationMinutes = (int)lesson.Duration.TotalMinutes
         });
 
@@ -268,9 +247,6 @@ public class LessonsService : ILessonsService
                     StudentName = null,
                     DateTime = newLessonDto.DateTime,
                     Description = newLessonDto.Description,
-                    Price = newLessonDto.Price,
-                    OneTime = newLessonDto.OneTime,
-                    TeacherEarnings = newLessonDto.TeacherEarnings,
                     DurationMinutes = newLessonDto.DurationMinutes
                 }, new User(Guid.NewGuid(), Role.Admin));
             }

@@ -6,8 +6,13 @@ public sealed class Student : Entity
 {
     public required string FullName { get; set; }
 
-    public string? MessengerLink { get; set; }
-    
-    public List<string> Languages { get; set; } = [];
     public List<Lesson> Lessons { get; init; } = [];
+
+    public List<SubjectGrade> Grades { get; set; } = [];
+
+    public List<Attestation> Attestations { get; set; } = [];
+
+    public List<Certificate> Certificates { get; set; } = [];
+
+    public List<Subject> Subjects { get; set; } = [];
 }

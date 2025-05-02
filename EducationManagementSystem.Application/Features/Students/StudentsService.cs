@@ -1,7 +1,5 @@
 ﻿using EducationManagementSystem.Application.Database;
 using EducationManagementSystem.Application.Features.Auth.Models;
-using EducationManagementSystem.Application.Features.Clock;
-using EducationManagementSystem.Application.Features.Lessons.Predicates;
 using EducationManagementSystem.Application.Features.Students.Dtos;
 using FluentValidation;
 using EducationManagementSystem.Application.Extensions;
@@ -17,40 +15,16 @@ public class StudentsService : IStudentsService
 {
     private readonly AppDbContext _dbContext;
     private readonly IValidator<NewStudentDto> _studentDtoValidator;
-    private readonly IClock _clock;
 
-    public StudentsService(AppDbContext dbContext, IValidator<NewStudentDto> studentDtoValidator, IClock clock)
+    public StudentsService(AppDbContext dbContext, IValidator<NewStudentDto> studentDtoValidator)
     {
         _dbContext = dbContext;
         _studentDtoValidator = studentDtoValidator;
-        _clock = clock;
     }
     
     public async Task<IReadOnlyList<StudentDto>> GetAllStudents(User currentUser)
     {
-        // if(currentUser.Role == Role.Teacher)
-        // {
-        //     var teacher = await _dbContext.Teachers
-        //         .AsNoTracking()
-        //         .Include(x => x.Lessons)
-        //         .ThenInclude(x => x.Student)
-        //         .FirstOrDefaultAsync(x => x.Id == currentUser.Id);
-        //     teacher.ThrowIfNull(_ => new NotFoundException("Teacher not found"));
-        //     
-        //     return teacher.Lessons
-        //         .Select(x => x.Student)
-        //         .AsQueryable()
-        //         .OrderByDescending(x => x.Lessons.Where(y => !y.Paid).Sum(y => (int)y.Price))
-        //         .ProjectToType<StudentDto>()
-        //         .ToList();
-        // }
-        
         return await _dbContext.Students
-            .OrderByDescending(x => 
-                x.Lessons
-                    .AsQueryable()
-                    .Where(LessonPredicates.UnpaidLessonPredicate(_clock))
-                    .Sum(y => (int)y.Price))
             .ProjectToType<StudentDto>()
             .ToListAsync();
     }
@@ -89,8 +63,6 @@ public class StudentsService : IStudentsService
         studentToUpdate.ThrowIfNull(_ => new NotFoundException("Student not found"));
 
         studentToUpdate.FullName = student.FullName;
-        studentToUpdate.MessengerLink = student.MessengerLink;
-        studentToUpdate.Languages = student.Languages;
         
         await _dbContext.SaveChangesAsync();
     }

@@ -80,10 +80,7 @@ public class TeachersService : ITeachersService
             Username = registerDto.Username,
             PasswordHash = passwordHash,
             PasswordSalt = passwordSalt,
-            Balance = 0,
-            WorkingHours = registerDto.WorkingHours,
             RegisteredAt = DateTime.UtcNow,
-            MessengerLink = registerDto.MessengerLink
         };
 
         await _dbContext.Teachers.AddAsync(newTeacher);
@@ -105,7 +102,6 @@ public class TeachersService : ITeachersService
             throw new UnauthorizedException("You can't edit other teachers");
         }
         
-        teacher.WorkingHours = workingHours;
         await _dbContext.SaveChangesAsync();
     }
     
@@ -121,7 +117,6 @@ public class TeachersService : ITeachersService
             throw new UnauthorizedException("Moderators can't edit admins and moderators");
         }
 
-        teacher.Balance = balance;
         await _dbContext.SaveChangesAsync();
     }
     

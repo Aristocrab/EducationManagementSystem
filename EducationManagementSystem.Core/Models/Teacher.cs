@@ -13,11 +13,6 @@ public sealed class Teacher : Entity
     public required string PasswordSalt { get; init; }
     
     public required DateTime RegisteredAt { get; init; }
-    public required decimal Balance { get; set; }
-    
-    public string? MessengerLink { get; set; }
-    
-    public required string WorkingHours { get; set; }
     
     public List<Lesson> Lessons { get; init; } = [];
 }

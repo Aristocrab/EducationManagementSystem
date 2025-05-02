@@ -48,8 +48,6 @@ public class DatabaseSeeder
                 Role = Role.Admin,
                 FullName = admin["FullName"],
                 Username = admin["Username"],
-                Balance = 0,
-                WorkingHours = "",
                 PasswordHash = hash,
                 PasswordSalt = salt,
                 RegisteredAt = DateTime.UtcNow

@@ -33,12 +33,10 @@ public class TeachersServiceTests : ServiceTests
             Id = Admin.Id,
             FullName = "Bob",
             Username = "bobbob",
-            Balance = 100,
             PasswordHash = "",
             PasswordSalt = "",
             Role = Role.Admin,
             RegisteredAt = _clock.Now,
-            WorkingHours = ""
         };
         dbContext.Teachers.Add(teacher);
         dbContext.SaveChanges();

@@ -40,12 +40,10 @@ public class AuthServiceTests : ServiceTests
             Id = Admin.Id,
             FullName = "Bob",
             Username = "bobbob",
-            Balance = 100,
             PasswordHash = hash,
             PasswordSalt = salt,
             Role = Role.Teacher,
             RegisteredAt = _clock.Now,
-            WorkingHours = ""
         };
         _dbContext.Teachers.Add(_teacher);
         _dbContext.SaveChanges();
@@ -73,12 +71,10 @@ public class AuthServiceTests : ServiceTests
             Id = Admin.Id,
             FullName = "Bob",
             Username = "bobbob",
-            Balance = 100,
             PasswordHash = hash,
             PasswordSalt = salt,
             Role = Role.Teacher,
             RegisteredAt = _clock.Now,
-            WorkingHours = ""
         };
         _dbContext.Teachers.Add(_teacher);
         _dbContext.SaveChanges();
@@ -193,7 +189,6 @@ public class AuthServiceTests : ServiceTests
         // Assert
         var updatedTeacher = await _dbContext.Teachers.FirstOrDefaultAsync(t => t.Id == _teacher.Id);
         updatedTeacher.Should().NotBeNull();
-        updatedTeacher!.Balance.Should().Be(100);
     }
     
     [Fact]
@@ -220,12 +215,10 @@ public class AuthServiceTests : ServiceTests
             Id = Guid.NewGuid(),
             FullName = "Bob",
             Username = "bobbob",
-            Balance = 100,
             PasswordHash = "",
             PasswordSalt = "",
             Role = Role.Admin,
             RegisteredAt = _clock.Now,
-            WorkingHours = ""
         };
         _dbContext.Teachers.Add(admin);
         await _dbContext.SaveChangesAsync();
