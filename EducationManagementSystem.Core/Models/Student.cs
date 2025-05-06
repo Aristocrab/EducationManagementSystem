@@ -7,6 +7,8 @@ public sealed class Student : Entity
     public required string FullName { get; set; }
 
     public List<Lesson> Lessons { get; init; } = [];
+    
+    public Group Group { get; set; } = null!;
 
     public List<SubjectGrade> Grades { get; set; } = [];
 

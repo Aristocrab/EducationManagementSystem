@@ -2,9 +2,9 @@
 using FluentAssertions.Extensions;
 using FluentValidation;
 using EducationManagementSystem.Application.Database;
-using EducationManagementSystem.Application.Features.Clock;
 using EducationManagementSystem.Application.Features.Students;
 using EducationManagementSystem.Application.Features.Students.Dtos;
+using EducationManagementSystem.Application.Shared.Clock;
 using EducationManagementSystem.Core.Enums;
 using EducationManagementSystem.Core.Models;
 using EducationManagementSystem.Tests.Shared;

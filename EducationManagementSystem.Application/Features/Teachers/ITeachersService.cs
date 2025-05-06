@@ -1,6 +1,6 @@
-using EducationManagementSystem.Application.Features.Auth.Dtos;
-using EducationManagementSystem.Application.Features.Auth.Models;
 using EducationManagementSystem.Application.Features.Teachers.Dtos;
+using EducationManagementSystem.Application.Shared.Auth.Dtos;
+using EducationManagementSystem.Application.Shared.Auth.Models;
 using EducationManagementSystem.Core.Enums;
 
 namespace EducationManagementSystem.Application.Features.Teachers;

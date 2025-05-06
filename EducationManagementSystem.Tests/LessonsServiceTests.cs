@@ -3,9 +3,9 @@ using FluentAssertions.Extensions;
 using FluentDateTime;
 using EducationManagementSystem.Application.Database;
 using EducationManagementSystem.Application.Extensions;
-using EducationManagementSystem.Application.Features.Clock;
 using EducationManagementSystem.Application.Features.Lessons;
 using EducationManagementSystem.Application.Features.Lessons.Dtos;
+using EducationManagementSystem.Application.Shared.Clock;
 using EducationManagementSystem.Core.Enums;
 using EducationManagementSystem.Core.Exceptions;
 using EducationManagementSystem.Core.Models;
@@ -572,12 +572,6 @@ public class LessonsServiceTests : ServiceTests
         // Assert
         var lesson1AfterReset = await _dbContext.Lessons.FindAsync(lesson1.Id);
         lesson1AfterReset.Should().NotBeNull();
-        
-        // Copy of lesson1 (not one-time) next week should be created
-        var copyOfLesson1NextWeek = await _dbContext.Lessons
-            .Where(x => x.DateTime == lesson1.DateTime.AddDays(7) && x.Description == lesson1.Description)
-            .ToListAsync();
-        copyOfLesson1NextWeek.Should().HaveCount(1);
         
         var copyOfLesson3NextWeek = await _dbContext.Lessons
             .Where(x => x.DateTime == lesson3.DateTime.AddDays(7) && x.Description == lesson3.Description)

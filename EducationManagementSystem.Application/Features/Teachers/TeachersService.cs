@@ -1,10 +1,10 @@
 using EducationManagementSystem.Application.Database;
-using EducationManagementSystem.Application.Features.Auth.Dtos;
-using EducationManagementSystem.Application.Features.Auth.Models;
-using EducationManagementSystem.Application.Features.PasswordHashing;
 using EducationManagementSystem.Application.Features.Teachers.Dtos;
 using FluentValidation;
 using EducationManagementSystem.Application.Extensions;
+using EducationManagementSystem.Application.Shared.Auth.Dtos;
+using EducationManagementSystem.Application.Shared.Auth.Models;
+using EducationManagementSystem.Application.Shared.PasswordHashing;
 using EducationManagementSystem.Core.Enums;
 using EducationManagementSystem.Core.Exceptions;
 using EducationManagementSystem.Core.Models;

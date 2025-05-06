@@ -8,7 +8,6 @@ public sealed class Certificate : Entity
     public required Subject Subject { get; set; }
     public required string CourseTitle { get; set; }
     public required decimal CourseGrade { get; set; }
-    public required decimal MaxGrade { get; set; } = 100;
     public required string Issuer { get; set; }
     public required string Link { get; set; }
     public required DateTime IssuedAt { get; set; }

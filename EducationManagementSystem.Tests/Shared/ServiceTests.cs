@@ -1,4 +1,4 @@
-using EducationManagementSystem.Application.Features.Auth.Models;
+using EducationManagementSystem.Application.Shared.Auth.Models;
 using EducationManagementSystem.Core.Enums;
 
 

@@ -7,6 +7,6 @@ public sealed class Attestation : Entity
 {
     public required Student Student { get; set; }
     public required Subject Subject { get; set; }
-    public required AttestationResult Result { get; set; } 
+    public AttestationResult Result { get; set; } = AttestationResult.NotSelected;
     public required DateTime Date { get; set; }
 }

@@ -1,9 +1,9 @@
 ﻿using EducationManagementSystem.Application.Database;
-using EducationManagementSystem.Application.Features.Auth.Models;
-using EducationManagementSystem.Application.Features.Clock;
 using EducationManagementSystem.Application.Features.Lessons.Dtos;
 using FluentDate;
 using EducationManagementSystem.Application.Extensions;
+using EducationManagementSystem.Application.Shared.Auth.Models;
+using EducationManagementSystem.Application.Shared.Clock;
 using EducationManagementSystem.Core.Enums;
 using EducationManagementSystem.Core.Exceptions;
 using EducationManagementSystem.Core.Models;

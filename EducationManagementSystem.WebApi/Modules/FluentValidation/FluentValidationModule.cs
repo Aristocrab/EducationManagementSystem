@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using Aristocrab.AspNetCore.AppModules;
+using EducationManagementSystem.Application.Shared.Auth.Validators;
 using FluentValidation;
-using EducationManagementSystem.Application.Features.Auth.Validators;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EducationManagementSystem.WebApi.Modules.FluentValidation;

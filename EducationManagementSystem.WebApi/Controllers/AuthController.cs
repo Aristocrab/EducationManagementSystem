@@ -1,7 +1,7 @@
-﻿using EducationManagementSystem.Application.Features.Auth;
-using EducationManagementSystem.Application.Features.Auth.Dtos;
-using EducationManagementSystem.Application.Features.Teachers;
+﻿using EducationManagementSystem.Application.Features.Teachers;
 using EducationManagementSystem.Application.Features.Teachers.Dtos;
+using EducationManagementSystem.Application.Shared.Auth;
+using EducationManagementSystem.Application.Shared.Auth.Dtos;
 using EducationManagementSystem.WebApi.Controllers.Shared;
 using EducationManagementSystem.Core.Enums;
 using Microsoft.AspNetCore.Authorization;

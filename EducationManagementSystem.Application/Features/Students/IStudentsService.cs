@@ -1,5 +1,5 @@
-﻿using EducationManagementSystem.Application.Features.Auth.Models;
-using EducationManagementSystem.Application.Features.Students.Dtos;
+﻿using EducationManagementSystem.Application.Features.Students.Dtos;
+using EducationManagementSystem.Application.Shared.Auth.Models;
 
 namespace EducationManagementSystem.Application.Features.Students;
 

@@ -1,10 +1,10 @@
 ﻿using FluentAssertions;
 using FluentValidation;
 using EducationManagementSystem.Application.Database;
-using EducationManagementSystem.Application.Features.Auth.Dtos;
-using EducationManagementSystem.Application.Features.Clock;
-using EducationManagementSystem.Application.Features.PasswordHashing;
 using EducationManagementSystem.Application.Features.Teachers;
+using EducationManagementSystem.Application.Shared.Auth.Dtos;
+using EducationManagementSystem.Application.Shared.Clock;
+using EducationManagementSystem.Application.Shared.PasswordHashing;
 using EducationManagementSystem.Core.Enums;
 using EducationManagementSystem.Core.Models;
 using EducationManagementSystem.Tests.Shared;

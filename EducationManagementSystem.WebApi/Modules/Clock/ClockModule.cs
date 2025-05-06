@@ -1,5 +1,5 @@
 using Aristocrab.AspNetCore.AppModules;
-using EducationManagementSystem.Application.Features.Clock;
+using EducationManagementSystem.Application.Shared.Clock;
 
 namespace EducationManagementSystem.WebApi.Modules.Clock;
 

@@ -1,4 +1,4 @@
-using EducationManagementSystem.Application.Features.PasswordHashing;
+using EducationManagementSystem.Application.Shared.PasswordHashing;
 using EducationManagementSystem.Core.Enums;
 using EducationManagementSystem.Core.Models;
 using Microsoft.EntityFrameworkCore;

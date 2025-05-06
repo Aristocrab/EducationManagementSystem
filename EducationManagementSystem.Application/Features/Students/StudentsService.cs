@@ -1,8 +1,8 @@
 ﻿using EducationManagementSystem.Application.Database;
-using EducationManagementSystem.Application.Features.Auth.Models;
 using EducationManagementSystem.Application.Features.Students.Dtos;
 using FluentValidation;
 using EducationManagementSystem.Application.Extensions;
+using EducationManagementSystem.Application.Shared.Auth.Models;
 using EducationManagementSystem.Core.Exceptions;
 using EducationManagementSystem.Core.Models;
 using Mapster;

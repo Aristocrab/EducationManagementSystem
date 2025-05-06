@@ -1,5 +1,5 @@
 using Aristocrab.AspNetCore.AppModules;
-using EducationManagementSystem.Application.Features.Telegram.Interfaces;
+using EducationManagementSystem.Application.Shared.Telegram.Interfaces;
 using Refit;
 
 namespace EducationManagementSystem.WebApi.Modules.Telegram;
