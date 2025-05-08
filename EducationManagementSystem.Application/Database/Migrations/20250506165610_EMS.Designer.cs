@@ -3,6 +3,7 @@ using System;
 using EducationManagementSystem.Application.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,32 +11,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EducationManagementSystem.Application.Database.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250506165610_EMS")]
+    partial class EMS
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.4");
-
-            modelBuilder.Entity("EducationManagementSystem.Core.Models.AllowedCertificate", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("SubjectId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SubjectId");
-
-                    b.ToTable("AllowedCertificates");
-                });
 
             modelBuilder.Entity("EducationManagementSystem.Core.Models.Attestation", b =>
                 {
@@ -369,17 +352,6 @@ namespace EducationManagementSystem.Application.Database.Migrations
                     b.ToTable("StudentSubject");
                 });
 
-            modelBuilder.Entity("EducationManagementSystem.Core.Models.AllowedCertificate", b =>
-                {
-                    b.HasOne("EducationManagementSystem.Core.Models.Subject", "Subject")
-                        .WithMany("AllowedCertificates")
-                        .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Subject");
-                });
-
             modelBuilder.Entity("EducationManagementSystem.Core.Models.Attestation", b =>
                 {
                     b.HasOne("EducationManagementSystem.Core.Models.Student", "Student")
@@ -541,8 +513,6 @@ namespace EducationManagementSystem.Application.Database.Migrations
 
             modelBuilder.Entity("EducationManagementSystem.Core.Models.Subject", b =>
                 {
-                    b.Navigation("AllowedCertificates");
-
                     b.Navigation("Teachers");
                 });
 

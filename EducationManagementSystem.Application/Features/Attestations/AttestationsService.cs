@@ -4,7 +4,6 @@ using EducationManagementSystem.Application.Features.Attestations.Dtos;
 using EducationManagementSystem.Application.Shared.Auth.Models;
 using EducationManagementSystem.Core.Exceptions;
 using EducationManagementSystem.Core.Models;
-using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Throw;
 
@@ -13,12 +12,10 @@ namespace EducationManagementSystem.Application.Features.Attestations;
 public class AttestationsService : IAttestationsService
 {
     private readonly AppDbContext _dbContext;
-    private readonly IValidator<NewAttestationDto> _validator;
 
-    public AttestationsService(AppDbContext dbContext, IValidator<NewAttestationDto> validator)
+    public AttestationsService(AppDbContext dbContext)
     {
         _dbContext = dbContext;
-        _validator = validator;
     }
 
     public async Task<IReadOnlyList<AttestationDto>> GetAll(User currentUser)
@@ -58,7 +55,6 @@ public class AttestationsService : IAttestationsService
 
     public async Task Add(NewAttestationDto dto, User currentUser)
     {
-        await _validator.ValidateAndThrowAsync(dto);
         currentUser.Throw().IfNotAdminOrModerator();
 
         var student = await _dbContext.Students.FirstOrDefaultAsync(s => s.Id == dto.StudentId);
@@ -81,7 +77,6 @@ public class AttestationsService : IAttestationsService
 
     public async Task Edit(Guid id, NewAttestationDto dto, User currentUser)
     {
-        await _validator.ValidateAndThrowAsync(dto);
         currentUser.Throw().IfNotAdminOrModerator();
 
         var attestation = await _dbContext.Attestations

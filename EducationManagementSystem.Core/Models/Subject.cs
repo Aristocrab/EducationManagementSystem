@@ -9,4 +9,5 @@ public sealed class Subject : Entity
     public List<Student> Students { get; set; } = [];
     public decimal CertificateMaxGrade { get; set; } = 100;
     public int MaxCertificates { get; set; } = 1; // todo
+    public List<AllowedCertificate> AllowedCertificates { get; set; } = [];
 }

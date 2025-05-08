@@ -1,4 +1,6 @@
 ﻿using Aristocrab.AspNetCore.AppModules;
+using EducationManagementSystem.Application.Features.Certificates.Helpers;
+using EducationManagementSystem.Application.Features.Certificates.Strategies;
 using EducationManagementSystem.Application.Features.Teachers;
 
 namespace EducationManagementSystem.WebApi.Modules.Common;
@@ -16,6 +18,10 @@ public class CommonModule : AppModule
             .AddClasses(classes => classes.Where(x => x.Name.EndsWith("Service")))
             .AsImplementedInterfaces()
             .WithScopedLifetime());
+
+        builder.Services.AddScoped<ICertificateParserResolver, CertificateParserResolver>();
+        builder.Services.AddScoped<CourseraCertificateParser>();
+        builder.Services.AddScoped<PrometheusCertificateParser>();
     }
 
     public override void ConfigureApplication(WebApplication app)

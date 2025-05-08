@@ -4,7 +4,6 @@ using EducationManagementSystem.Application.Features.Sessions.Dtos;
 using EducationManagementSystem.Application.Shared.Auth.Models;
 using EducationManagementSystem.Core.Exceptions;
 using EducationManagementSystem.Core.Models;
-using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Throw;
 
@@ -13,12 +12,10 @@ namespace EducationManagementSystem.Application.Features.Sessions;
 public class SessionsService : ISessionsService
 {
     private readonly AppDbContext _dbContext;
-    private readonly IValidator<NewSessionDto> _validator;
 
-    public SessionsService(AppDbContext dbContext, IValidator<NewSessionDto> validator)
+    public SessionsService(AppDbContext dbContext)
     {
         _dbContext = dbContext;
-        _validator = validator;
     }
 
     public async Task<IReadOnlyList<SessionDto>> GetAll(User currentUser)
@@ -58,7 +55,6 @@ public class SessionsService : ISessionsService
 
     public async Task Add(NewSessionDto dto, User currentUser)
     {
-        await _validator.ValidateAndThrowAsync(dto);
         currentUser.Throw().IfNotAdminOrModerator();
 
         var student = await _dbContext.Students.FirstOrDefaultAsync(s => s.Id == dto.StudentId);
@@ -81,7 +77,6 @@ public class SessionsService : ISessionsService
 
     public async Task Edit(Guid id, NewSessionDto dto, User currentUser)
     {
-        await _validator.ValidateAndThrowAsync(dto);
         currentUser.Throw().IfNotAdminOrModerator();
 
         var session = await _dbContext.Sessions

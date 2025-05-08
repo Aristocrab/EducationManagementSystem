@@ -7,6 +7,7 @@ public interface ICertificatesService
 {
     Task<IReadOnlyList<CertificateDto>> GetAll(User currentUser);
     Task<CertificateDto> GetById(Guid id);
-    Task Add(NewCertificateDto dto, User currentUser);
+    Task UploadCertificate(NewCertificateDto dto, User currentUser);
+    Task AddAllowedCertificate(AllowedCertificateDto dto, User currentUser);
     Task Delete(Guid id, User currentUser);
 }

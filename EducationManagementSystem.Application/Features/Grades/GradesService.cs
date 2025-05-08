@@ -4,7 +4,6 @@ using EducationManagementSystem.Application.Features.Grades.Dtos;
 using EducationManagementSystem.Application.Shared.Auth.Models;
 using EducationManagementSystem.Core.Exceptions;
 using EducationManagementSystem.Core.Models;
-using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Throw;
 
@@ -13,12 +12,10 @@ namespace EducationManagementSystem.Application.Features.Grades;
 public class GradesService : IGradesService
 {
     private readonly AppDbContext _dbContext;
-    private readonly IValidator<NewSubjectGradeDto> _gradeValidator;
 
-    public GradesService(AppDbContext dbContext, IValidator<NewSubjectGradeDto> gradeValidator)
+    public GradesService(AppDbContext dbContext)
     {
         _dbContext = dbContext;
-        _gradeValidator = gradeValidator;
     }
 
     public async Task<IReadOnlyList<SubjectGradeDto>> GetAllGrades(User currentUser)
@@ -58,7 +55,6 @@ public class GradesService : IGradesService
 
     public async Task AddGrade(NewSubjectGradeDto newGradeDto, User currentUser)
     {
-        await _gradeValidator.ValidateAndThrowAsync(newGradeDto);
         currentUser.Throw().IfNotAdminOrModerator();
 
         var student = await _dbContext.Students.FirstOrDefaultAsync(s => s.Id == newGradeDto.StudentId);
@@ -81,7 +77,6 @@ public class GradesService : IGradesService
 
     public async Task EditGrade(Guid gradeId, NewSubjectGradeDto gradeDto, User currentUser)
     {
-        await _gradeValidator.ValidateAndThrowAsync(gradeDto);
         currentUser.Throw().IfNotAdminOrModerator();
 
         var grade = await _dbContext.SubjectGrades

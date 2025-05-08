@@ -4,8 +4,6 @@ using EducationManagementSystem.Application.Features.Groups.Dtos;
 using EducationManagementSystem.Application.Shared.Auth.Models;
 using EducationManagementSystem.Core.Exceptions;
 using EducationManagementSystem.Core.Models;
-using EducationManagementSystem.Core.ValueTypes;
-using FluentValidation;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Throw;
@@ -15,12 +13,10 @@ namespace EducationManagementSystem.Application.Features.Groups;
 public sealed class GroupsService : IGroupsService
 {
     private readonly AppDbContext _dbContext;
-    private readonly IValidator<NewGroupDto> _groupValidator;
 
-    public GroupsService(AppDbContext dbContext, IValidator<NewGroupDto> groupValidator)
+    public GroupsService(AppDbContext dbContext)
     {
         _dbContext = dbContext;
-        _groupValidator = groupValidator;
     }
 
     public async Task<IReadOnlyList<GroupDto>> GetAllGroups(User currentUser)
@@ -46,7 +42,6 @@ public sealed class GroupsService : IGroupsService
     public async Task AddGroup(NewGroupDto newGroupDto, User currentUser)
     {
         currentUser.Throw().IfNotAdminOrModerator();
-        await _groupValidator.ValidateAndThrowAsync(newGroupDto);
 
         var group = newGroupDto.Adapt<Group>();
 
@@ -57,7 +52,6 @@ public sealed class GroupsService : IGroupsService
     public async Task EditGroup(Guid groupId, NewGroupDto groupDto, User currentUser)
     {
         currentUser.Throw().IfNotAdminOrModerator();
-        await _groupValidator.ValidateAndThrowAsync(groupDto);
 
         var group = await _dbContext.Groups
             .Include(g => g.Students)
@@ -65,7 +59,7 @@ public sealed class GroupsService : IGroupsService
 
         group.ThrowIfNull(_ => new NotFoundException("Group not found"));
 
-        group.GroupId = GroupId.From(groupDto.GroupId);
+        group.GroupId = groupDto.GroupId;
 
         await _dbContext.SaveChangesAsync();
     }

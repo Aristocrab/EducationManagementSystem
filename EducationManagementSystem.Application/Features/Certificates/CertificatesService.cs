@@ -5,7 +5,6 @@ using EducationManagementSystem.Application.Features.Certificates.Helpers;
 using EducationManagementSystem.Application.Shared.Auth.Models;
 using EducationManagementSystem.Core.Exceptions;
 using EducationManagementSystem.Core.Models;
-using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Throw;
 
@@ -14,13 +13,11 @@ namespace EducationManagementSystem.Application.Features.Certificates;
 public class CertificatesService : ICertificatesService
 {
     private readonly AppDbContext _dbContext;
-    private readonly IValidator<NewCertificateDto> _validator;
     private readonly ICertificateParserResolver _parserResolver;
 
-    public CertificatesService(AppDbContext dbContext, IValidator<NewCertificateDto> validator, ICertificateParserResolver parserResolver)
+    public CertificatesService(AppDbContext dbContext, ICertificateParserResolver parserResolver)
     {
         _dbContext = dbContext;
-        _validator = validator;
         _parserResolver = parserResolver;
     }
 
@@ -65,9 +62,8 @@ public class CertificatesService : ICertificatesService
         };
     }
 
-    public async Task Add(NewCertificateDto dto, User currentUser)
+    public async Task UploadCertificate(NewCertificateDto dto, User currentUser)
     {
-        await _validator.ValidateAndThrowAsync(dto);
         currentUser.Throw().IfNotAdminOrModerator();
 
         var student = await _dbContext.Students
@@ -101,6 +97,26 @@ public class CertificatesService : ICertificatesService
             studentCourse.Value = Math.Round(certificate.CourseGrade / 100 * maxGrade);
         }
 
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task AddAllowedCertificate(AllowedCertificateDto dto, User currentUser)
+    {
+        currentUser.Throw().IfNotAdminOrModerator();
+
+        var subject = await _dbContext.Subjects
+            .Include(s => s.AllowedCertificates)
+            .FirstOrDefaultAsync(x => x.Id == dto.SubjectId);
+        
+        subject.ThrowIfNull(_ => new NotFoundException("Subject not found"));
+        
+        var allowedCertificate = new AllowedCertificate
+        {
+            Name = dto.Name,
+            Subject = subject,
+        };
+
+        _dbContext.AllowedCertificates.Add(allowedCertificate);
         await _dbContext.SaveChangesAsync();
     }
 

@@ -4,7 +4,6 @@ using EducationManagementSystem.Application.Features.Subjects.Dtos;
 using EducationManagementSystem.Application.Shared.Auth.Models;
 using EducationManagementSystem.Core.Exceptions;
 using EducationManagementSystem.Core.Models;
-using FluentValidation;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Throw;
@@ -14,12 +13,10 @@ namespace EducationManagementSystem.Application.Features.Subjects;
 public class SubjectsService : ISubjectsService
 {
     private readonly AppDbContext _dbContext;
-    private readonly IValidator<NewSubjectDto> _subjectDtoValidator;
 
-    public SubjectsService(AppDbContext dbContext, IValidator<NewSubjectDto> subjectDtoValidator)
+    public SubjectsService(AppDbContext dbContext)
     {
         _dbContext = dbContext;
-        _subjectDtoValidator = subjectDtoValidator;
     }
 
     public async Task<IReadOnlyList<SubjectDto>> GetAllSubjects(User currentUser)
@@ -46,8 +43,6 @@ public class SubjectsService : ISubjectsService
     public async Task AddSubject(NewSubjectDto newSubjectDto, User currentUser)
     {
         currentUser.Throw().IfNotAdminOrModerator();
-
-        await _subjectDtoValidator.ValidateAndThrowAsync(newSubjectDto);
 
         var subject = newSubjectDto.Adapt<Subject>();
 
