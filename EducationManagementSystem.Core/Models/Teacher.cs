@@ -15,4 +15,6 @@ public sealed class Teacher : Entity
     public required DateTime RegisteredAt { get; init; }
     
     public List<Lesson> Lessons { get; init; } = [];
+    public List<Subject> Subjects { get; init; } = [];
+    public List<Group> Groups { get; init; } = [];
 }

@@ -7,7 +7,10 @@ public sealed class Lesson : Entity
 {
     public required Teacher Teacher { get; init; }
     public required Student Student { get; set; }
-    public Subject? Subject { get; set; }
+    public required Subject Subject { get; set; }
+    public List<Group> Groups { get; set; } = [];
+    public List<SelectedSubjectGroup> SelectedSubjectGroups { get; set; } = [];
+    public bool IsSelectedSubject { get; set; } = false;
     public required DateTime DateTime { get; set; }
     public required TimeSpan Duration { get; set; }
     public required string Description { get; set; }

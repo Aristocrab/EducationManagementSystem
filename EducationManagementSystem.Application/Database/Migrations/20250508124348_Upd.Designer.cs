@@ -3,6 +3,7 @@ using System;
 using EducationManagementSystem.Application.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EducationManagementSystem.Application.Database.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250508124348_Upd")]
+    partial class Upd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.4");
@@ -113,15 +116,10 @@ namespace EducationManagementSystem.Application.Database.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("LessonId")
-                        .HasColumnType("TEXT");
-
                     b.Property<Guid?>("TeacherId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("LessonId");
 
                     b.HasIndex("TeacherId");
 
@@ -144,16 +142,13 @@ namespace EducationManagementSystem.Application.Database.Migrations
                     b.Property<TimeSpan>("Duration")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("IsSelectedSubject")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("Status")
                         .HasColumnType("INTEGER");
 
                     b.Property<Guid>("StudentId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("SubjectId")
+                    b.Property<Guid?>("SubjectId")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("TeacherId")
@@ -226,29 +221,12 @@ namespace EducationManagementSystem.Application.Database.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("SchoolName")
-                        .IsRequired()
+                    b.Property<decimal>("Balance")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.ToTable("Schools");
-                });
-
-            modelBuilder.Entity("EducationManagementSystem.Core.Models.SelectedSubjectGroup", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("LessonId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LessonId");
-
-                    b.ToTable("SelectedSubjectGroup");
                 });
 
             modelBuilder.Entity("EducationManagementSystem.Core.Models.Session", b =>
@@ -291,14 +269,9 @@ namespace EducationManagementSystem.Application.Database.Migrations
                     b.Property<Guid>("GroupId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("SelectedSubjectGroupId")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
 
                     b.HasIndex("GroupId");
-
-                    b.HasIndex("SelectedSubjectGroupId");
 
                     b.ToTable("Students");
                 });
@@ -465,10 +438,6 @@ namespace EducationManagementSystem.Application.Database.Migrations
 
             modelBuilder.Entity("EducationManagementSystem.Core.Models.Group", b =>
                 {
-                    b.HasOne("EducationManagementSystem.Core.Models.Lesson", null)
-                        .WithMany("Groups")
-                        .HasForeignKey("LessonId");
-
                     b.HasOne("EducationManagementSystem.Core.Models.Teacher", null)
                         .WithMany("Groups")
                         .HasForeignKey("TeacherId");
@@ -484,9 +453,7 @@ namespace EducationManagementSystem.Application.Database.Migrations
 
                     b.HasOne("EducationManagementSystem.Core.Models.Subject", "Subject")
                         .WithMany()
-                        .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SubjectId");
 
                     b.HasOne("EducationManagementSystem.Core.Models.Teacher", "Teacher")
                         .WithMany("Lessons")
@@ -508,13 +475,6 @@ namespace EducationManagementSystem.Application.Database.Migrations
                         .HasForeignKey("StudentId");
 
                     b.Navigation("Student");
-                });
-
-            modelBuilder.Entity("EducationManagementSystem.Core.Models.SelectedSubjectGroup", b =>
-                {
-                    b.HasOne("EducationManagementSystem.Core.Models.Lesson", null)
-                        .WithMany("SelectedSubjectGroups")
-                        .HasForeignKey("LessonId");
                 });
 
             modelBuilder.Entity("EducationManagementSystem.Core.Models.Session", b =>
@@ -543,10 +503,6 @@ namespace EducationManagementSystem.Application.Database.Migrations
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("EducationManagementSystem.Core.Models.SelectedSubjectGroup", null)
-                        .WithMany("Students")
-                        .HasForeignKey("SelectedSubjectGroupId");
 
                     b.Navigation("Group");
                 });
@@ -601,18 +557,6 @@ namespace EducationManagementSystem.Application.Database.Migrations
                 });
 
             modelBuilder.Entity("EducationManagementSystem.Core.Models.Group", b =>
-                {
-                    b.Navigation("Students");
-                });
-
-            modelBuilder.Entity("EducationManagementSystem.Core.Models.Lesson", b =>
-                {
-                    b.Navigation("Groups");
-
-                    b.Navigation("SelectedSubjectGroups");
-                });
-
-            modelBuilder.Entity("EducationManagementSystem.Core.Models.SelectedSubjectGroup", b =>
                 {
                     b.Navigation("Students");
                 });

@@ -4,6 +4,7 @@ public class NewStudentDto
 {
     public required string FullName { get; init; }
     public required List<string> Languages { get; init; }
+    public required string GroupId { get; init; }
 
     public string? MessengerLink { get; set; }
 }

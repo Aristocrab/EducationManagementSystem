@@ -49,6 +49,12 @@ public class LessonsService : ILessonsService
             student = new Student
             {
                 FullName = newLesson.StudentName!,
+                Group = new Group
+                {
+                    Id = Guid.NewGuid(),
+                    GroupId = "ІС-12",
+                    Students = []
+                }
             };
             await _dbContext.Students.AddAsync(student);
         }
@@ -59,6 +65,11 @@ public class LessonsService : ILessonsService
             DateTime = newLesson.DateTime,
             Description = newLesson.Description,
             Teacher = teacher,
+            Subject = new Subject // todo
+            {
+                Id = Guid.NewGuid(),
+                Title = "english"
+            },
             Duration = newLesson.DurationMinutes.Minutes(),
         };
 
@@ -74,6 +85,11 @@ public class LessonsService : ILessonsService
                 DateTime = newLesson.DateTime.AddDays(7),
                 Description = newLesson.Description,
                 Teacher = teacher,
+                Subject = new Subject // todo
+                {
+                    Id = Guid.NewGuid(),
+                    Title = "english"
+                },
                 Duration = newLesson.DurationMinutes.Minutes(),
             };
             
@@ -112,17 +128,7 @@ public class LessonsService : ILessonsService
         
         if(lesson.Status == newStatus) return;
 
-        if (lesson.Status == Status.Completed)
-        {
-            var school = await _dbContext.Schools.FirstAsync();
-        }
-
         lesson.Status = newStatus;
-
-        if (newStatus == Status.Completed)
-        {
-            var school1 = await _dbContext.Schools.FirstAsync();
-        }
 
         await _dbContext.SaveChangesAsync();
     }
@@ -152,13 +158,19 @@ public class LessonsService : ILessonsService
             student = new Student
             {
                 FullName = newLesson.StudentName!,
+                Group = new Group
+                {
+                    Id = Guid.NewGuid(),
+                    GroupId = "ІС-12",
+                    Students = []
+                }
             };
             await _dbContext.Students.AddAsync(student);
         }
 
         // Check if there is a lesson next week and edit it as well
         if (_dbContext.Lessons.Include(x => x.Student)
-                .Any(IsSameLessonNextWeek(lessonToEdit)))
+            .Any(IsSameLessonNextWeek(lessonToEdit)))
         {
             var lessonNextWeek = await _dbContext.Lessons.FirstAsync(x => x.DateTime == lessonToEdit.DateTime.AddDays(7));
             var newLessonNextWeek = newLesson with { DateTime = lessonToEdit.DateTime.AddDays(7) };
@@ -196,7 +208,7 @@ public class LessonsService : ILessonsService
         var lessonToDelete = teacher.Lessons.Find(x => x.Id == lessonId);
         lessonToDelete.ThrowIfNull(_ => new NotFoundException("Lesson not found"));
         
-         // Check if there is a lesson next week and delete it as well
+        // Check if there is a lesson next week and delete it as well
         if (teacher.Lessons.Any(IsSameLessonNextWeek(lessonToDelete)))
         {
             var lessonNextWeek = teacher.Lessons

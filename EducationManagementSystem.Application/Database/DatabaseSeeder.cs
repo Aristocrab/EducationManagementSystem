@@ -27,7 +27,7 @@ public class DatabaseSeeder
         {
             _dbContext.Schools.Add(new School
             {
-                Balance = 0
+                SchoolName = "KPI"
             });
             _dbContext.SaveChanges();
         }

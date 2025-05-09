@@ -51,6 +51,13 @@ public class StudentsService : IStudentsService
         
         var student = newStudent.Adapt<Student>();
         
+        var group = await _dbContext.Groups
+            .FirstOrDefaultAsync(x => x.GroupId == newStudent.GroupId);
+        
+        group.ThrowIfNull(_ => new NotFoundException("Group not found"));
+        
+        student.Group = group;
+        
         await _dbContext.Students.AddAsync(student);
         await _dbContext.SaveChangesAsync();
     }

@@ -4,5 +4,5 @@ namespace EducationManagementSystem.Core.Models;
 
 public sealed class School : Entity
 {
-    public required decimal Balance { get; set; }
+    public string SchoolName { get; set; } = string.Empty;
 }
