@@ -22,9 +22,10 @@ public sealed class SubjectsSelectionService : ISubjectsSelectionService
         var groups = await _dbContext.SelectedSubjectGroups
             .Include(g => g.Subject)
             .Include(g => g.Students)
+            .ProjectToType<SelectedSubjectGroupDto>()
             .ToListAsync();
         
-        return groups.Adapt<IReadOnlyList<SelectedSubjectGroupDto>>();
+        return groups;
     }
 
     public async Task<SelectedSubjectGroupDto> GetByIdAsync(Guid groupId)

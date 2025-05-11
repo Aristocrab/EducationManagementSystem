@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EducationManagementSystem.WebApi.Controllers;
 
+[Route("certificates")]
 public class CertificatesController : BaseController
 {
     private readonly ICertificatesService _certificatesService;

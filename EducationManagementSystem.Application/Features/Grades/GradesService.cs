@@ -4,6 +4,7 @@ using EducationManagementSystem.Application.Features.Grades.Dtos;
 using EducationManagementSystem.Application.Shared.Auth.Models;
 using EducationManagementSystem.Core.Exceptions;
 using EducationManagementSystem.Core.Models;
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Throw;
 
@@ -23,14 +24,7 @@ public class GradesService : IGradesService
         return await _dbContext.SubjectGrades
             .Include(g => g.Student)
             .Include(g => g.Subject)
-            .Select(g => new SubjectGradeDto
-            {
-                Id = g.Id,
-                StudentName = g.Student.FullName,
-                SubjectTitle = g.Subject.Title,
-                Value = g.Value,
-                IssuedAt = g.IssuedAt
-            })
+            .ProjectToType<SubjectGradeDto>()
             .ToListAsync();
     }
 
@@ -43,14 +37,7 @@ public class GradesService : IGradesService
 
         grade.ThrowIfNull(_ => new NotFoundException("Grade not found"));
 
-        return new SubjectGradeDto
-        {
-            Id = grade.Id,
-            StudentName = grade.Student.FullName,
-            SubjectTitle = grade.Subject.Title,
-            Value = grade.Value,
-            IssuedAt = grade.IssuedAt
-        };
+        return grade.Adapt<SubjectGradeDto>();
     }
 
     public async Task AddGrade(NewSubjectGradeDto newGradeDto, User currentUser)

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EducationManagementSystem.WebApi.Controllers;
 
+[Route("grades")]
 public class GradesController : BaseController
 {
     private readonly IGradesService _gradesService;

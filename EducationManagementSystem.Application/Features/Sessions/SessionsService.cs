@@ -4,6 +4,7 @@ using EducationManagementSystem.Application.Features.Sessions.Dtos;
 using EducationManagementSystem.Application.Shared.Auth.Models;
 using EducationManagementSystem.Core.Exceptions;
 using EducationManagementSystem.Core.Models;
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Throw;
 
@@ -23,14 +24,7 @@ public class SessionsService : ISessionsService
         return await _dbContext.Sessions
             .Include(s => s.Student)
             .Include(s => s.Subject)
-            .Select(s => new SessionDto
-            {
-                Id = s.Id,
-                StudentName = s.Student.FullName,
-                SubjectTitle = s.Subject.Title,
-                Grade = s.Grade,
-                Date = s.Date
-            })
+            .ProjectToType<SessionDto>()
             .ToListAsync();
     }
 
@@ -43,14 +37,7 @@ public class SessionsService : ISessionsService
 
         session.ThrowIfNull(_ => new NotFoundException("Session not found"));
 
-        return new SessionDto
-        {
-            Id = session.Id,
-            StudentName = session.Student.FullName,
-            SubjectTitle = session.Subject.Title,
-            Grade = session.Grade,
-            Date = session.Date
-        };
+        return session.Adapt<SessionDto>();
     }
 
     public async Task Add(NewSessionDto dto, User currentUser)

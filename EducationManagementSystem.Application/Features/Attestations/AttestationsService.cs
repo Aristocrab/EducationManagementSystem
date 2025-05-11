@@ -4,6 +4,7 @@ using EducationManagementSystem.Application.Features.Attestations.Dtos;
 using EducationManagementSystem.Application.Shared.Auth.Models;
 using EducationManagementSystem.Core.Exceptions;
 using EducationManagementSystem.Core.Models;
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Throw;
 
@@ -23,14 +24,7 @@ public class AttestationsService : IAttestationsService
         return await _dbContext.Attestations
             .Include(a => a.Student)
             .Include(a => a.Subject)
-            .Select(a => new AttestationDto
-            {
-                Id = a.Id,
-                StudentName = a.Student.FullName,
-                SubjectTitle = a.Subject.Title,
-                Result = a.Result,
-                Date = a.Date
-            })
+            .ProjectToType<AttestationDto>()
             .ToListAsync();
     }
 
@@ -43,14 +37,7 @@ public class AttestationsService : IAttestationsService
 
         attestation.ThrowIfNull(_ => new NotFoundException("Attestation not found"));
 
-        return new AttestationDto
-        {
-            Id = attestation.Id,
-            StudentName = attestation.Student.FullName,
-            SubjectTitle = attestation.Subject.Title,
-            Result = attestation.Result,
-            Date = attestation.Date
-        };
+        return attestation.Adapt<AttestationDto>();
     }
 
     public async Task Add(NewAttestationDto dto, User currentUser)
