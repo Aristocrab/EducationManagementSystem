@@ -6,7 +6,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace EducationManagementSystem.WebApi.Controllers;
 
-[Route("sessions")]
+[Route("api/sessions")]
 public class SessionsController : BaseController
 {
     private readonly ISessionsService _sessionsService;

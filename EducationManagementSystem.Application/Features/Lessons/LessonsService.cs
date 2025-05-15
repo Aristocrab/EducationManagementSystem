@@ -36,40 +36,20 @@ public class LessonsService : ILessonsService
             .FirstOrDefaultAsync(x => x.Id == teacherId);
         teacher.ThrowIfNull(_ => new NotFoundException("Teacher not found"));
 
-        Student student;
-        if (newLesson.ExistingStudentId is not null)
-        {
-            var existingStudent = await _dbContext.Students.FirstOrDefaultAsync(x => x.Id == newLesson.ExistingStudentId);
-            existingStudent.ThrowIfNull(_ => new NotFoundException("Student not found"));
-            
-            student = existingStudent;
-        }
-        else
-        {
-            student = new Student
-            {
-                FullName = newLesson.StudentName!,
-                Group = new Group
-                {
-                    Id = Guid.NewGuid(),
-                    GroupId = "ІС-12",
-                    Students = []
-                }
-            };
-            await _dbContext.Students.AddAsync(student);
-        }
+        var existingStudent = await _dbContext.Students.FirstOrDefaultAsync(x => x.Id == newLesson.ExistingStudentId);
+        existingStudent.ThrowIfNull(_ => new NotFoundException("Student not found"));
 
+        var subject = await _dbContext.Subjects
+            .FirstOrDefaultAsync(x => x.Id == newLesson.SubjectId);
+        subject.ThrowIfNull(_ => new NotFoundException("Subject not found"));
+        
         var lessonToAdd = new Lesson
         {
-            Student = student,
+            Student = existingStudent,
             DateTime = newLesson.DateTime,
             Description = newLesson.Description,
             Teacher = teacher,
-            Subject = new Subject // todo
-            {
-                Id = Guid.NewGuid(),
-                Title = "english"
-            },
+            Subject = subject,
             Duration = newLesson.DurationMinutes.Minutes(),
         };
 
@@ -81,15 +61,11 @@ public class LessonsService : ILessonsService
         {
             var lessonNextWeek = new Lesson
             {
-                Student = student,
+                Student = existingStudent,
                 DateTime = newLesson.DateTime.AddDays(7),
                 Description = newLesson.Description,
                 Teacher = teacher,
-                Subject = new Subject // todo
-                {
-                    Id = Guid.NewGuid(),
-                    Title = "english"
-                },
+                Subject = subject,
                 Duration = newLesson.DurationMinutes.Minutes(),
             };
             
@@ -145,28 +121,8 @@ public class LessonsService : ILessonsService
         var lessonToEdit = teacher.Lessons.Find(x => x.Id == lessonId);
         lessonToEdit.ThrowIfNull(_ => new NotFoundException("Lesson not found"));
         
-        Student student;
-        if (newLesson.ExistingStudentId is not null)
-        {
             var existingStudent = await _dbContext.Students.FirstOrDefaultAsync(x => x.Id == newLesson.ExistingStudentId);
             existingStudent.ThrowIfNull(_ => new NotFoundException("Student not found"));
-            
-            student = existingStudent;
-        }
-        else
-        {
-            student = new Student
-            {
-                FullName = newLesson.StudentName!,
-                Group = new Group
-                {
-                    Id = Guid.NewGuid(),
-                    GroupId = "ІС-12",
-                    Students = []
-                }
-            };
-            await _dbContext.Students.AddAsync(student);
-        }
 
         // Check if there is a lesson next week and edit it as well
         if (_dbContext.Lessons.Include(x => x.Student)
@@ -185,7 +141,7 @@ public class LessonsService : ILessonsService
             }
         }
         
-        lessonToEdit.Student = student;
+        lessonToEdit.Student = existingStudent;
         lessonToEdit.DateTime = newLesson.DateTime;
         lessonToEdit.Description = newLesson.Description;
         lessonToEdit.Duration = newLesson.DurationMinutes.Minutes();
@@ -237,6 +193,7 @@ public class LessonsService : ILessonsService
         var lessonsToCopy = await _dbContext.Lessons
             .Include(x => x.Student)
             .Include(x => x.Teacher)
+            .Include(lesson => lesson.Subject)
             .Where(x => x.DateTime >= startOfCurrentWeek)
             .ToListAsync();
 
@@ -244,6 +201,7 @@ public class LessonsService : ILessonsService
         {
             ExistingStudentId = lesson.Student.Id,
             DateTime = lesson.DateTime.AddDays(7),
+            SubjectId = lesson.Subject.Id,
             Description = lesson.Description,
             Teacher = lesson.Teacher,
             DurationMinutes = (int)lesson.Duration.TotalMinutes
@@ -256,7 +214,7 @@ public class LessonsService : ILessonsService
                 await AddLesson(newLessonDto.Teacher.Id, new NewLessonDto
                 {
                     ExistingStudentId = newLessonDto.ExistingStudentId,
-                    StudentName = null,
+                    SubjectId = newLessonDto.SubjectId,
                     DateTime = newLessonDto.DateTime,
                     Description = newLessonDto.Description,
                     DurationMinutes = newLessonDto.DurationMinutes

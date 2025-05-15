@@ -8,7 +8,7 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace EducationManagementSystem.WebApi.Controllers;
 
 [Authorize]
-[Route("students")]
+[Route("api/students")]
 public class StudentsController : BaseController
 {
     private readonly IStudentsService _studentsService;

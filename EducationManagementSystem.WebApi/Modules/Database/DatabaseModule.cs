@@ -21,6 +21,6 @@ public class DatabaseModule : AppModule
         using var scope = app.Services.CreateScope();
         
         var db = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
-        db.FillAdmins();
+        db.FillDb();
     }
 }

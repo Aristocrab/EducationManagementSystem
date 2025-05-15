@@ -17,6 +17,7 @@ public sealed class AppDbContext : DbContext
     public DbSet<Session> Sessions { get; init; }
     public DbSet<AllowedCertificate> AllowedCertificates { get; init; }
     public DbSet<SelectedSubjectGroup> SelectedSubjectGroups { get; init; }
+    public DbSet<EducationEvent> EducationEvents { get; init; }
     
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 }

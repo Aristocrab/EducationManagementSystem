@@ -10,7 +10,7 @@ public sealed class Lesson : Entity
     public required Subject Subject { get; set; }
     public List<Group> Groups { get; set; } = [];
     public List<SelectedSubjectGroup> SelectedSubjectGroups { get; set; } = [];
-    public bool IsSelectedSubject { get; set; } = false;
+    public bool IsSelectedSubject { get; set; }
     public required DateTime DateTime { get; set; }
     public required TimeSpan Duration { get; set; }
     public required string Description { get; set; }

@@ -6,8 +6,8 @@ namespace EducationManagementSystem.Application.Features.Sessions.Dtos;
 public class SessionDto
 {
     public Guid Id { get; set; }
-    public required StudentDto StudentName { get; set; }
-    public required SubjectDto SubjectTitle { get; set; }
+    public required StudentDto Student { get; set; }
+    public required SubjectDto Subject { get; set; }
     public decimal Grade { get; set; }
     public DateTime Date { get; set; }
 }

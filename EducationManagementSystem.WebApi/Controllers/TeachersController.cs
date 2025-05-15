@@ -1,12 +1,13 @@
 ﻿using EducationManagementSystem.Application.Features.Teachers;
 using EducationManagementSystem.Application.Features.Teachers.Dtos;
+using EducationManagementSystem.Application.Shared.Auth.Dtos;
 using EducationManagementSystem.WebApi.Controllers.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace EducationManagementSystem.WebApi.Controllers;
 
-[Route("teachers")]
+[Route("api/teachers")]
 public class TeachersController : BaseController
 {
     private readonly ITeachersService _scheduleService;
@@ -35,5 +36,12 @@ public class TeachersController : BaseController
     public async Task<TeacherDto> GetTeacherById(Guid teacherId)
     {
         return await _scheduleService.GetTeacherById(teacherId, CurrentUser);
+    }
+    
+    [HttpPost]
+    [SwaggerOperation(Summary = "Add a new teacher")]
+    public async Task AddTeacher([FromBody] RegisterDto newTeacher)
+    {
+        await _scheduleService.RegisterTeacher(newTeacher, CurrentUser);
     }
 }

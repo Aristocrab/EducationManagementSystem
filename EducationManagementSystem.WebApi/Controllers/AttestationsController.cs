@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EducationManagementSystem.WebApi.Controllers;
 
-[Route("attestations")]
+[Route("api/attestations")]
 public class AttestationsController : BaseController
 {
     private readonly IAttestationsService _attestationsService;

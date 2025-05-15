@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EducationManagementSystem.WebApi.Controllers;
 
-[Route("groups")]
+[Route("api/groups")]
 public class GroupsController : BaseController
 {
     private readonly IGroupsService _groupsService;
